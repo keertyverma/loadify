@@ -11,7 +11,7 @@ class ProductModel(models.Model):
     is_active = models.BooleanField(default=None)
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
-    created_at = models.DateTimeField(default=now)
+    created_at = models.DateTimeField(default=now, editable=False)
     updated_at = models.DateTimeField(default=now)
 
     def __str__(self):
@@ -25,7 +25,7 @@ class ProductUploadModel(models.Model):
     processed_rows = models.IntegerField(default=0)
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
-    created_at = models.DateTimeField(default=now)
+    created_at = models.DateTimeField(default=now, editable=False)
     updated_at = models.DateTimeField(default=now)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class WebhookModel(models.Model):
     path = models.CharField(max_length=500, default=None)
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
-    created_at = models.DateTimeField(default=now)
+    created_at = models.DateTimeField(default=now, editable=False)
 
     def __str__(self):
         return self.name
