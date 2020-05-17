@@ -1,3 +1,3 @@
 release: python manage.py migrate --settings=settings.production
-web: uvicorn loadify.asgi:application --lifespan on --host=0.0.0.0 --port=${PORT:-5000}
+web: gunicorn loadify.asgi -k uvicorn.workers.UvicornWorker --log-file -
 worker: celery worker -A loadify
