@@ -49,7 +49,6 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'django_filters',
-    'bootstrapform',
 
     'channels',
     'django_eventstream',
