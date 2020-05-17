@@ -33,8 +33,7 @@ class ProductTruncateModel(models.Model):
 
 class ProductUploadModel(models.Model):
     name = models.CharField(max_length=255, default=None)
-    path = models.FileField(upload_to='csvs/%Y/%m/%d/',
-                            verbose_name='Document')
+    path = models.FileField(verbose_name='Document')
     size = models.IntegerField(default=0)
     imported_rows = models.IntegerField(default=0)
     status = models.CharField(max_length=16, default='Queued')
