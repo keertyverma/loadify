@@ -92,12 +92,13 @@ class TruncateProductView(RedirectView):
 
 class UploadProductEventView(RedirectView):
     permanent = False
+    url = 'https://postman-echo.com/get'
 
     def get_redirect_url(self, *args, **kwargs):
         args = dict(parse.parse_qsl(self.request.META.get('QUERY_STRING', '')))
         send_event('upload_status', 'message', {
                    'id': args['id'], 'status': args['status'], 'count': args['count']})
-        return None
+        return super().get_redirect_url(*args, **kwargs)
 
 
 class ProductUploadListView(ListView):
