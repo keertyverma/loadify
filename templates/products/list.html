@@ -6,6 +6,9 @@
 <p>
     <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
 </p>
+<p>
+    <a href="{% url 'product_delete_all' %}" class="btn btn-danger">Delete All Products</a>
+</p>
 {% endblock %}
 <form method="GET">
     {{filter.form|crispy}}
@@ -24,7 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for product in filter.qs %}
+        {% for product in object_list %}
         <tr>
             <td>{{ product.sku_orig }}</td>
             <td>{{ product.name }}</td>
@@ -37,4 +40,26 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% if is_paginated %}
+<ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+    <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+    <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+    <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+</ul>
+{% endif %}
 {% endblock %}

@@ -23,6 +23,12 @@ class ProductUpdateForm(forms.ModelForm):
         }
 
 
+class ProductDeleteForm(forms.ModelForm):
+    class Meta:
+        model = ProductTruncateModel
+        fields = ()
+
+
 class ProductUploadForm(forms.ModelForm):
     class Meta:
         model = ProductUploadModel

@@ -21,6 +21,8 @@ from .models import ProductModel, ProductUploadModel
 @shared_task
 def import_csv(import_job_id, file_path):
     count = 0
+    ProductUploadModel.objects.filter(id=import_job_id).update(
+        status='Processing', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
 
     try:
         file_object = open('%s%s' % (settings.MEDIA_ROOT, file_path))
@@ -30,12 +32,13 @@ def import_csv(import_job_id, file_path):
             row['sku_orig'] = row['sku']
             row['sku'] = row['sku'].lower()
             row['is_active'] = random.choice([True, False])
-            logging.info(row)
             rows.append(row)
             count += 1
             if count % 100 == 0:
                 res = bulk_update_or_create(
                     ProductModel, rows, key_fields='sku')
+                ProductUploadModel.objects.filter(id=import_job_id).update(
+                    status='Processing', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
                 rows = []
                 logging.info('Imported %d rows' % count)
 
