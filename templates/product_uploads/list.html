@@ -13,8 +13,9 @@
         <tr>
             <th>Name</th>
             <th>Path</th>
-            <th>Total Rows</th>
-            <th>Processed Row</th>
+            <th>Size (Bytes)</th>
+            <th>Imported Rows</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -22,8 +23,9 @@
         <tr>
             <td>{{ upload_info.name }}</td>
             <td>{{ upload_info.path }}</td>
-            <td>{{ upload_info.total_rows }}</td>
-            <td>{{ upload_info.processed_row }}</td>
+            <td>{{ upload_info.size }}</td>
+            <td>{{ upload_info.imported_rows }}</td>
+            <td>{{ upload_info.status }}</td>
         </tr>
         {% endfor %}
     </tbody>
