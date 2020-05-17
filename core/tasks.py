@@ -3,26 +3,34 @@ Celery Tasks to handle pulling data from host and run the task in background wit
 """
 
 # from __future__ import absolute_import, unicode_literals
+from .models import ProductModel, ProductUploadModel
 import logging
 import csv
 import os
 import random
+import requests
 
 from datetime import datetime
 from django.utils import timezone
 
 from celery import shared_task
 from django.conf import settings
-from django_pg_bulk_update import bulk_update_or_create, pdnf_clause
+from django_pg_bulk_update import bulk_update_or_create
 
-from .models import ProductModel, ProductUploadModel
+
+def update_job_status(job_id, status, count):
+    ProductUploadModel.objects.filter(id=job_id).update(
+        status=status, updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
+    base_url = os.environ['DJANGO_SERVER_URL']
+    requests.get(base_url + 'products/uploads/events',
+                 params={'id': job_id, 'status': status, 'count': count})
 
 
 @shared_task
 def import_csv(import_job_id, file_path):
     count = 0
-    ProductUploadModel.objects.filter(id=import_job_id).update(
-        status='Processing', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
+
+    update_job_status(import_job_id, 'Processing', count)
 
     try:
         file_object = open('%s%s' % (settings.MEDIA_ROOT, file_path))
@@ -37,8 +45,7 @@ def import_csv(import_job_id, file_path):
             if count % 100 == 0:
                 res = bulk_update_or_create(
                     ProductModel, rows, key_fields='sku')
-                ProductUploadModel.objects.filter(id=import_job_id).update(
-                    status='Processing', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
+                update_job_status(import_job_id, 'Processing', count)
                 rows = []
                 logging.info('Imported %d rows' % count)
 
@@ -47,9 +54,7 @@ def import_csv(import_job_id, file_path):
 
         logging.info('Import finished with %d rows' % count)
 
-        ProductUploadModel.objects.filter(id=import_job_id).update(
-            status='Completed', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
+        update_job_status(import_job_id, 'Completed', count)
     except Exception as e:
         logging.error(e)
-        ProductUploadModel.objects.filter(id=import_job_id).update(
-            status='Failed', updated_at=datetime.now(tz=timezone.utc), imported_rows=count)
+        update_job_status(import_job_id, 'Failed', count)

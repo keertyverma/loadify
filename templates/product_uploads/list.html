@@ -20,14 +20,29 @@
     </thead>
     <tbody>
         {% for upload_info in product_uploads %}
-        <tr>
+        <tr id="{{upload_info.id}}">
             <td>{{ upload_info.name }}</td>
             <td>{{ upload_info.path }}</td>
             <td>{{ upload_info.size }}</td>
-            <td>{{ upload_info.imported_rows }}</td>
-            <td>{{ upload_info.status }}</td>
+            <td name="count">{{ upload_info.imported_rows }}</td>
+            <td name="status">{{ upload_info.status }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<script>
+    var es = new ReconnectingEventSource('/events/');
+    es.addEventListener('message', function (e) {
+        console.log(e.data);
+        var data = JSON.parse(e.data)
+        $('tr#' + data.id + ' > td[name=count]').text(data.count);
+        $('tr#' + data.id + ' > td[name=status]').text(data.status)
+    }, false);
+    es.addEventListener('stream-reset', function (e) {
+        // ... client fell behind, reinitialize ...
+        console.log(e.data);
+    }, false);
+</script>
+
 {% endblock %}
