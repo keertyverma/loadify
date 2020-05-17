@@ -6,6 +6,8 @@ from django.utils.timezone import now
 
 class ProductModel(models.Model):
     sku = models.CharField(max_length=255, primary_key=True, default=None)
+    sku_orig = models.CharField(
+        max_length=255, default=None, verbose_name='SKU')
     name = models.CharField(max_length=255, default=None)
     description = models.TextField(default=None)
     is_active = models.BooleanField(default=None)

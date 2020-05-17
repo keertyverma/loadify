@@ -10,6 +10,7 @@ import csv
 
 from .forms import *
 from .models import *
+from .tasks import import_csv
 
 
 class Home(TemplateView):
@@ -44,10 +45,14 @@ class CreateProductView(CreateView):
     success_url = reverse_lazy('product_list')
     template_name = 'products/create.html'
 
+    def form_valid(self, form):
+        form.instance.sku = form.instance.sku_orig.lower()
+        return super().form_valid(form)
+
 
 class UpdateProductView(UpdateView):
     model = ProductModel
-    form_class = ProductForm
+    form_class = ProductUpdateForm
     success_url = reverse_lazy('product_list')
     template_name = 'products/update.html'
 
@@ -73,6 +78,10 @@ class CreateProductUploadView(CreateView):
         form.instance.name = file_object.name
         form.instance.size = file_object.size
         return super(CreateProductUploadView, self).form_valid(form)
+
+    def get_success_url(self):
+        import_csv.delay(self.object.id, str(self.object.path))
+        return super().get_success_url()
 
 
 class WebhookListView(ListView):
