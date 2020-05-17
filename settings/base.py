@@ -134,8 +134,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_ROOT = 'media/'
@@ -151,6 +149,7 @@ CELERY_ACCEPT_CONTENT = ["json", "msgpack"]
 ASGI_APPLICATION = 'loadify.routing.application'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
