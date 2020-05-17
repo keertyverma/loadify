@@ -20,9 +20,11 @@ class ProductModel(models.Model):
 
 class ProductUploadModel(models.Model):
     name = models.CharField(max_length=255, default=None)
-    path = models.CharField(max_length=500, default=None)
-    total_rows = models.IntegerField(default=0)
-    processed_rows = models.IntegerField(default=0)
+    path = models.FileField(upload_to='csvs/%Y/%m/%d/',
+                            verbose_name='Document')
+    size = models.IntegerField(default=0)
+    imported_rows = models.IntegerField(default=0)
+    status = models.CharField(max_length=16, default='Queued')
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
     created_at = models.DateTimeField(default=now, editable=False)
@@ -34,9 +36,10 @@ class ProductUploadModel(models.Model):
 
 class WebhookModel(models.Model):
     name = models.CharField(max_length=255, default=None)
-    path = models.CharField(max_length=500, default=None)
+    url = models.URLField(max_length=500, default=None, verbose_name='URL')
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
+    is_active = models.BooleanField(default=None)
     created_at = models.DateTimeField(default=now, editable=False)
     updated_at = models.DateTimeField(default=now)
 
