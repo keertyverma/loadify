@@ -33,7 +33,9 @@ def import_csv(import_job_id, file_path):
     update_job_status(import_job_id, 'Processing', count)
 
     try:
-        file_object = open('%s%s' % (settings.MEDIA_ROOT, file_path))
+        logging.info('Current path %s' % os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))))
+        file_object = open(file_path)
         reader = csv.DictReader(file_object)
         rows = []
         for row in reader:
