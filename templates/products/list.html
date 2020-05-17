@@ -4,44 +4,59 @@
 {% load crispy_forms_tags %}
 {% block content_header %}
 <h2>Products</h2>
-<p>
-    <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
-</p>
-<p>
-    <a href="{% url 'product_delete_all' %}" class="btn btn-danger">Delete All Products</a>
-</p>
+
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group mr-2" role="group" aria-label="First group">
+        <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
+    </div>
+    <div class="btn-group mr-2" role="group" aria-label="Second group">
+        <a href="{% url 'product_uploads_upload' %}" class="btn btn-primary">Import Products</a>
+    </div>
+    <div class="btn-group" role="group" aria-label="Third group">
+        <a href="{% url 'product_delete_all' %}" class="btn btn-danger">Delete All Products</a>
+    </div>
+</div>
+
 {% endblock %}
-<form method="GET">
-    {{filter.form|crispy}}
-    <button type="submit" class="btn btn-primary">Refresh list</button>
-</form>
+<div class="card mt-4">
+    <div class="card-header">
+        Search Products
+    </div>
+    <div class="card-body">
+        <form method="GET">
+            {{filter.form|crispy}}
+            <button type="submit" class="btn btn-primary">Refresh list</button>
+        </form>
+    </div>
+</div>
 
 
-<table class="table mb-0">
-    <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Is Active</th>
-            <th>Update</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in object_list %}
-        <tr>
-            <td>{{ product.sku_orig }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.is_active }}</td>
-            <td>
-                <a href="{% url 'product_update' product.sku %}">Update</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+<div class="table-fixed">
+    <table class="table table-striped table-hover mb-0 mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Is Active</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in object_list %}
+            <tr>
+                <td>{{ product.sku_orig }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.is_active }}</td>
+                <td>
+                    <a href="{% url 'product_update' product.sku %}">Update</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% if is_paginated %}
 <ul class="pagination">
     {% if page_obj.has_previous %}

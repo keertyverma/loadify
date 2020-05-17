@@ -1,3 +1,17 @@
 body {
-    background: blueviolet;
+    background: darkcyan;
+}
+
+.navbar-dark{
+    background-color: #216752;
+}
+
+.navbar-dark .navbar-brand {
+    color: #fff;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255);
 }
