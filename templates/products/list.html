@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load custom_tags %}
 {% load crispy_forms_tags %}
 {% block content_header %}
 <h2>Products</h2>
@@ -44,7 +45,8 @@
 {% if is_paginated %}
 <ul class="pagination">
     {% if page_obj.has_previous %}
-    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    <li class="page-item"><a class="page-link"
+            href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;</a></li>
     {% else %}
     <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
     {% endif %}
@@ -52,11 +54,12 @@
     {% if page_obj.number == i %}
     <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
     {% else %}
-    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    <li class="page-item"><a class="page-link" href="?{% param_replace page=i %}">{{ i }}</a></li>
     {% endif %}
     {% endfor %}
     {% if page_obj.has_next %}
-    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    <li class="page-item"><a class="page-link" href="?{% param_replace page=page_obj.next_page_number %}">&raquo;</a>
+    </li>
     {% else %}
     <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
     {% endif %}

@@ -28,20 +28,6 @@ class ProductFilter(django_filters.FilterSet):
         fields = ('name', 'is_active')
 
 
-class ProductListView(ListView):
-    model = ProductModel
-    template_name = 'products/list.html'
-    context_object_name = 'products'
-    paginate_by = 4
-    # queryset = ProductModel.objects.all()  # Default: Model.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = ProductFilter(
-            self.request.GET, queryset=self.get_queryset())
-        return context
-
-
 class ProductListFilteredView(FilterView):
     model = ProductModel
     filterset_class = ProductFilter
