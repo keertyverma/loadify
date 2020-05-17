@@ -53,3 +53,40 @@ class UpdateProductView(UpdateView):
     def form_valid(self, form):
         form.instance.updated_at = datetime.utcnow()
         return super(UpdateProductView, self).form_valid(form)
+
+
+class ProductUploadListView(ListView):
+    model = ProductUploadModel
+    template_name = 'product_uploads/list.html'
+    context_object_name = 'products_upload'
+
+
+class CreateProductUploadView(CreateView):
+    model = ProductUploadModel
+    form_class = ProductUploadForm
+    success_url = reverse_lazy('product_upload_list')
+    template_name = 'product_uploads/upload.html'
+
+
+class WebhookListView(ListView):
+    model = WebhookModel
+    template_name = 'webhooks/list.html'
+    context_object_name = 'webhooks'
+
+
+class CreateWebhookView(CreateView):
+    model = WebhookModel
+    form_class = WebhookForm
+    success_url = reverse_lazy('webhook_list')
+    template_name = 'webhooks/create.html'
+
+
+class UpdateWebhookView(UpdateView):
+    model = WebhookModel
+    form_class = WebhookForm
+    success_url = reverse_lazy('webhook_list')
+    template_name = 'webhooks/update.html'
+
+    def form_valid(self, form):
+        form.instance.updated_at = datetime.utcnow()
+        return super(UpdateWebhookView, self).form_valid(form)

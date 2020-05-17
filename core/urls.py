@@ -15,4 +15,17 @@ urlpatterns = [
          name='product_create'),
     path('products/update/<pk>', views.UpdateProductView.as_view(),
          name='product_update'),
+
+    path('products/upload', views.CreateProductUploadView.as_view(),
+         name='product_upload'),
+    path('products/upload/list', views.ProductUploadListView.as_view(),
+         name='product_upload_list'),
+
+    path('products/webhook', views.CreateWebhookView.as_view(),
+         name='create_webhook'),
+    path('products/webhook/list', views.WebhookListView.as_view(),
+         name='webhook_list'),
+    path('products/webhook/update/<pk>', views.UpdateWebhookView.as_view(),
+         name='webhook_update'),
+
 ]

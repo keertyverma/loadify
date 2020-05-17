@@ -38,6 +38,7 @@ class WebhookModel(models.Model):
     # user = models.ForeignKey(settings.AUTH_USER_MODEL,
     #                          on_delete=models.CASCADE,),
     created_at = models.DateTimeField(default=now, editable=False)
+    updated_at = models.DateTimeField(default=now)
 
     def __str__(self):
         return self.name

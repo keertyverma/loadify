@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% block content_header %}
+<h2>WebHooks</h2>
+<p>
+    <a href="{% url 'create_webhook' %}" class="btn btn-primary">Configure Webhooks</a>
+</p>
+{% endblock %}
+
+<table class="table mb-0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Path</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for webhook in webhooks %}
+        <tr>
+            <td>{{ webhook.name }}</td>
+            <td>{{ webhook.path }}</td>
+            <td>
+                <a href="{% url 'webhook_update' webhook.id %}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
