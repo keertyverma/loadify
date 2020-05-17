@@ -13,7 +13,7 @@ from urllib import parse
 
 from .forms import *
 from .models import *
-from .tasks import import_csv
+from .tasks import import_csv, trigger_webhook
 
 
 class Home(TemplateView):
@@ -48,6 +48,25 @@ class CreateProductView(CreateView):
         form.instance.sku = form.instance.sku_orig.lower()
         return super().form_valid(form)
 
+    def get_success_url(self):
+        trigger_webhook.delay(self.object.sku, "product_create")
+        return super().get_success_url()
+
+
+class UpdateProductView(UpdateView):
+    model = ProductModel
+    form_class = ProductUpdateForm
+    success_url = reverse_lazy('product_list')
+    template_name = 'products/update.html'
+
+    def form_valid(self, form):
+        form.instance.updated_at = datetime.utcnow()
+        return super(UpdateProductView, self).form_valid(form)
+
+    def get_success_url(self):
+        trigger_webhook.delay(self.object.sku, "product_update")
+        return super().get_success_url()
+
 
 class DeleteProductView(CreateView):
     model = ProductTruncateModel
@@ -78,17 +97,6 @@ class UploadProductEventView(RedirectView):
         send_event('upload_status', 'message', {
                    'id': args['id'], 'status': args['status'], 'count': args['count']})
         return None
-
-
-class UpdateProductView(UpdateView):
-    model = ProductModel
-    form_class = ProductUpdateForm
-    success_url = reverse_lazy('product_list')
-    template_name = 'products/update.html'
-
-    def form_valid(self, form):
-        form.instance.updated_at = datetime.utcnow()
-        return super(UpdateProductView, self).form_valid(form)
 
 
 class ProductUploadListView(ListView):

@@ -17,10 +17,7 @@ class ProductForm(forms.ModelForm):
 class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = ProductModel
-        fields = ('sku_orig', 'name', 'description', 'is_active')
-        widgets = {
-            'sku_orig': forms.TextInput(attrs={'disabled': True}),
-        }
+        fields = ('name', 'description', 'is_active')
 
 
 class ProductDeleteForm(forms.ModelForm):
