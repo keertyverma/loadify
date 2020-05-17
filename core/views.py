@@ -35,7 +35,7 @@ class ProductListFilteredView(FilterView):
     filterset_class = ProductFilter
     template_name = 'products/list.html'
     context_object_name = 'products'
-    paginate_by = 2
+    paginate_by = 10
 
 
 class CreateProductView(CreateView):
