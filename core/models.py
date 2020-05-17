@@ -20,6 +20,9 @@ class ProductModel(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-created_at']
+
     @classmethod
     def truncate(cls):
         with connection.cursor() as cursor:

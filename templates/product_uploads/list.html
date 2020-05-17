@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load custom_tags %}
 {% load crispy_forms_tags %}
 {% block content_header %}
 <h2>Product Imports</h2>
@@ -13,7 +14,7 @@
         <tr>
             <th>Name</th>
             <th>Path</th>
-            <th>Size (Bytes)</th>
+            <th>Size (KB)</th>
             <th>Imported Rows</th>
             <th>Status</th>
         </tr>
@@ -23,7 +24,7 @@
         <tr id="{{upload_info.id}}">
             <td>{{ upload_info.name }}</td>
             <td>{{ upload_info.path }}</td>
-            <td>{{ upload_info.size }}</td>
+            <td>{{ upload_info.size|divide:1000 }}</td>
             <td name="count">{{ upload_info.imported_rows }}</td>
             <td name="status">{{ upload_info.status }}</td>
         </tr>
