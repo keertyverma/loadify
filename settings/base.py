@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django_filters',
     'bootstrapform',
 
+    'channels',
+    'django_eventstream',
+
     'core'
 ]
 
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_grip.GripMiddleware',
 ]
 
 ROOT_URLCONF = 'loadify.urls'
@@ -134,3 +138,9 @@ BROKER_CONNECTION_MAX_RETRIES = None
 
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["json", "msgpack"]
+
+ASGI_APPLICATION = 'loadify.routing.application'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]

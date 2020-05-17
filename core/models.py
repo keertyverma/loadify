@@ -46,6 +46,9 @@ class ProductUploadModel(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class WebhookModel(models.Model):
     name = models.CharField(max_length=255, default=None)

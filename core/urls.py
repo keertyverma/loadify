@@ -22,6 +22,8 @@ urlpatterns = [
          name='product_uploads_list'),
     path('products/uploads/upload', views.CreateProductUploadView.as_view(),
          name='product_uploads_upload'),
+    path('products/uploads/events', views.UploadProductEventView.as_view(),
+         name='product_uploads_events'),
 
 
     path('products/webhooks', views.WebhookListView.as_view(),

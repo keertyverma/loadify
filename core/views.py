@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, FormView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, FormView, RedirectView
 from django.views.generic.edit import FormView
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
@@ -7,7 +7,9 @@ from django.urls import reverse_lazy
 from datetime import datetime
 import django_filters
 from django_filters.views import FilterView
+from django_eventstream import send_event
 import csv
+from urllib import parse
 
 from .forms import *
 from .models import *
@@ -33,7 +35,7 @@ class ProductListFilteredView(FilterView):
     filterset_class = ProductFilter
     template_name = 'products/list.html'
     context_object_name = 'products'
-    paginate_by = 2
+    paginate_by = 10
 
 
 class CreateProductView(CreateView):
@@ -56,6 +58,26 @@ class DeleteProductView(CreateView):
     def get_success_url(self):
         ProductModel.truncate()
         return super().get_success_url()
+
+
+class TruncateProductView(RedirectView):
+
+    permanent = False
+    pattern_name = 'product_list'
+
+    def get_redirect_url(self, *args, **kwargs):
+        ProductModel.truncate()
+        return super().get_redirect_url(*args, **kwargs)
+
+
+class UploadProductEventView(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        args = dict(parse.parse_qsl(self.request.META.get('QUERY_STRING', '')))
+        send_event('upload_status', 'message', {
+                   'id': args['id'], 'status': args['status'], 'count': args['count']})
+        return None
 
 
 class UpdateProductView(UpdateView):
