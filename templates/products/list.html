@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% block content_header %}
+<h2>Products</h2>
+<p>
+    <a href="{% url 'product_create' %}" class="btn btn-primary">Add Product</a>
+</p>
+{% endblock %}
+<form method="GET">
+    {{filter.form|crispy}}
+    <button type="submit" class="btn btn-primary">Refresh list</button>
+</form>
+
+
+<table class="table mb-0">
+    <thead>
+        <tr>
+            <th>Sku</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Is Active</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in filter.qs %}
+        <tr>
+            <td>{{ product.sku }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.is_active }}</td>
+            <td>
+                <a href="{% url 'product_update' product.sku %}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

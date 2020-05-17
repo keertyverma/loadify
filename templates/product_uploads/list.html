@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% block content_header %}
+<h2>Uploaded Product Info</h2>
+<p>
+    <a href="{% url 'product_upload' %}" class="btn btn-primary">Upload Product</a>
+</p>
+{% endblock %}
+
+<table class="table mb-0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Path</th>
+            <th>Total Rows</th>
+            <th>Processed Row</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for upload_info in products_upload %}
+        <tr>
+            <td>{{ upload_info.name }}</td>
+            <td>{{ upload_info.path }}</td>
+            <td>{{ upload_info.total_rows }}</td>
+            <td>{{ upload_info.processed_row }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
