@@ -2,9 +2,9 @@
 {% block content %}
 {% load crispy_forms_tags %}
 {% block content_header %}
-<h2>Uploaded Product Info</h2>
+<h2>Product Imports</h2>
 <p>
-    <a href="{% url 'product_upload' %}" class="btn btn-primary">Upload Product</a>
+    <a href="{% url 'product_uploads_upload' %}" class="btn btn-primary">Import Products</a>
 </p>
 {% endblock %}
 
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for upload_info in products_upload %}
+        {% for upload_info in product_uploads %}
         <tr>
             <td>{{ upload_info.name }}</td>
             <td>{{ upload_info.path }}</td>

@@ -11,10 +11,10 @@ class ProductForm(forms.ModelForm):
 class ProductUploadForm(forms.ModelForm):
     class Meta:
         model = ProductUploadModel
-        fields = ('name', 'path', 'total_rows', 'processed_rows')
+        fields = ('path',)
 
 
 class WebhookForm(forms.ModelForm):
     class Meta:
         model = WebhookModel
-        fields = ('name', 'path')
+        fields = ('name', 'url', 'is_active')

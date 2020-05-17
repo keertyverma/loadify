@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, FormView
+from django.views.generic.edit import FormView
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 
 from datetime import datetime
-
 import django_filters
+import csv
 
 from .forms import *
 from .models import *
@@ -58,14 +59,20 @@ class UpdateProductView(UpdateView):
 class ProductUploadListView(ListView):
     model = ProductUploadModel
     template_name = 'product_uploads/list.html'
-    context_object_name = 'products_upload'
+    context_object_name = 'product_uploads'
 
 
 class CreateProductUploadView(CreateView):
     model = ProductUploadModel
     form_class = ProductUploadForm
-    success_url = reverse_lazy('product_upload_list')
+    success_url = reverse_lazy('product_uploads_list')
     template_name = 'product_uploads/upload.html'
+
+    def form_valid(self, form):
+        file_object = self.request.FILES['path']
+        form.instance.name = file_object.name
+        form.instance.size = file_object.size
+        return super(CreateProductUploadView, self).form_valid(form)
 
 
 class WebhookListView(ListView):
@@ -77,14 +84,14 @@ class WebhookListView(ListView):
 class CreateWebhookView(CreateView):
     model = WebhookModel
     form_class = WebhookForm
-    success_url = reverse_lazy('webhook_list')
+    success_url = reverse_lazy('webhooks_list')
     template_name = 'webhooks/create.html'
 
 
 class UpdateWebhookView(UpdateView):
     model = WebhookModel
     form_class = WebhookForm
-    success_url = reverse_lazy('webhook_list')
+    success_url = reverse_lazy('webhooks_list')
     template_name = 'webhooks/update.html'
 
     def form_valid(self, form):
