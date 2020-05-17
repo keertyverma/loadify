@@ -10,11 +10,13 @@ from . import views
 urlpatterns = [
     path('', views.Home.as_view(), name='home'),
 
-    path('products/', views.ProductListView.as_view(), name='product_list'),
+    path('products/', views.ProductListFilteredView.as_view(), name='product_list'),
     path('products/create/', views.CreateProductView.as_view(),
          name='product_create'),
     path('products/update/<pk>', views.UpdateProductView.as_view(),
          name='product_update'),
+    path('products/delete_all', views.DeleteProductView.as_view(),
+         name='product_delete_all'),
 
     path('products/uploads', views.ProductUploadListView.as_view(),
          name='product_uploads_list'),

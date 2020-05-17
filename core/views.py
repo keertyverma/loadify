@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 
 from datetime import datetime
 import django_filters
+from django_filters.views import FilterView
 import csv
 
 from .forms import *
@@ -27,16 +28,12 @@ class ProductFilter(django_filters.FilterSet):
         fields = ('name', 'is_active')
 
 
-class ProductListView(ListView):
+class ProductListFilteredView(FilterView):
     model = ProductModel
+    filterset_class = ProductFilter
     template_name = 'products/list.html'
     context_object_name = 'products'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter'] = ProductFilter(
-            self.request.GET, queryset=self.get_queryset())
-        return context
+    paginate_by = 2
 
 
 class CreateProductView(CreateView):
@@ -48,6 +45,17 @@ class CreateProductView(CreateView):
     def form_valid(self, form):
         form.instance.sku = form.instance.sku_orig.lower()
         return super().form_valid(form)
+
+
+class DeleteProductView(CreateView):
+    model = ProductTruncateModel
+    form_class = ProductDeleteForm
+    success_url = reverse_lazy('product_list')
+    template_name = 'products/delete.html'
+
+    def get_success_url(self):
+        ProductModel.truncate()
+        return super().get_success_url()
 
 
 class UpdateProductView(UpdateView):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.timezone import now
+from django.db import connection
 # Create your models here.
 
 
@@ -18,6 +19,16 @@ class ProductModel(models.Model):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'TRUNCATE TABLE {} CASCADE'.format(cls._meta.db_table))
+
+
+class ProductTruncateModel(models.Model):
+    created_at = models.DateTimeField(default=now, editable=False)
 
 
 class ProductUploadModel(models.Model):
