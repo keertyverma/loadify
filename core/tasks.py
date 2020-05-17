@@ -3,7 +3,7 @@ Celery Tasks to handle pulling data from host and run the task in background wit
 """
 
 # from __future__ import absolute_import, unicode_literals
-from .models import ProductModel, ProductUploadModel
+from .models import ProductModel, ProductUploadModel, WebhookModel
 import logging
 import csv
 import os
@@ -58,3 +58,20 @@ def import_csv(import_job_id, file_path):
     except Exception as e:
         logging.error(e)
         update_job_status(import_job_id, 'Failed', count)
+
+
+@shared_task
+def trigger_webhook(product_id, event):
+    # get all active webhooks from DB
+    webhooks = WebhookModel.objects.filter(is_active=True).values('url')
+    for webhook in webhooks:
+        call_webhook.delay(webhook['url'], product_id, event)
+
+
+@shared_task
+def call_webhook(url, product_id, event):
+    # post call to each webhooks with above data
+    try:
+        requests.post(url, data={"sku": product_id, "event": event})
+    except Exception as e:
+        logging.error(e)
