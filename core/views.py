@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, ListView, CreateView, UpdateView,
 from django.views.generic.edit import FormView
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
-from django.conf import settings
+
 from datetime import datetime
 import django_filters
 from django_filters.views import FilterView
@@ -119,8 +119,7 @@ class CreateProductUploadView(CreateView):
         return super(CreateProductUploadView, self).form_valid(form)
 
     def get_success_url(self):
-        import_csv.delay(self.object.id, os.path.join(
-            settings.BASE_DIR, 'media', str(self.object.path)))
+        import_csv.delay(self.object.id, str(self.object.path))
         return super().get_success_url()
 
 
