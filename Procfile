@@ -1,3 +1,3 @@
 release: python manage.py migrate --settings=settings.production
-web: gunicorn loadify.asgi -k uvicorn.workers.UvicornWorker --log-file -
+web: daphne loadify.asgi:application --port $PORT --bind 0.0.0.0
 worker: celery worker -A loadify
