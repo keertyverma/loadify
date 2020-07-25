@@ -2,11 +2,11 @@
 
 [Loadify](https://loadify.herokuapp.com/) is a product importer tool. This is built as example project to showcase Django ecosystem. This app is made live at [https://loadify.herokuapp.com/](https://loadify.herokuapp.com/) Primary skills required for complete development of this tool are:
 
-1. Knowledge about following tools
+1. Knowledge about following tools:
    1. Django + Postgres
    2. SSE - Server Side events
    3. Celery + RabbitMQ
-2. Skills
+2. Skills:
    1. Ability to handle long running processes
    2. Use ORMs and deployment
 
